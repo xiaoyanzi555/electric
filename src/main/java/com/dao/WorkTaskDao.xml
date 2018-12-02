@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.WorkTaskDao">
+    <sql id="baseSql">
+        <if test="example!=null">
+            <where>
+                <if test="example.id!=null and example.id!=''">
+                    and wt.id like concat('%',#{example.id},'%')
+                </if>
+                <if test="example.owner_id!=null and example.owner_id!=''">
+                    and wt.owner_id like concat('%',#{example.owner_id},'%')
+                </if>
+                <if test="example.wait_task_type!=null and example.wait_task_type!=''">
+                    and wt.wait_task_type like concat('%',#{example.wait_task_type},'%')
+                </if>
+                <if test="example.wait_task_id!=null and example.wait_task_id!=''">
+                    and wt.wait_task_id like concat('%',#{example.wait_task_id},'%')
+                </if>
+                <if test="example.is_deal!=null and example.is_deal!=''">
+                    and wt.is_deal like concat('%',#{example.is_deal},'%')
+                </if>
+            </where>
+        </if>
+    </sql>
+    <select id="find" resultType="com.entity.WorkTask">
+        select wt.*,t.task_name as wait_task_name, t.distribute_time as arrive_time
+            from elec_work_task wt
+        <if test="example.roleid==12">
+            left join elec_inspection_task t
+        </if>
+       <if test="example.roleid==13">
+           left join elec_consume_task t
+       </if>
+        on wt.wait_task_id=t.id
+        <include refid="baseSql"/>
+        order by id limit #{page},#{rows}
+    </select>
+    <select id="count" resultType="int" parameterType="com.entity.WorkTask">
+        select count(*) from elec_work_task wt
+        <include refid="baseSql"/>
+    </select>
+    <insert id="add">
+        insert into elec_work_task(owner_id,wait_task_type,wait_task_id,is_deal) values(
+          #{owner_id},#{wait_task_type},#{wait_task_id},#{is_deal}
+        )
+    </insert>
+    <delete id="deleteByEntity">
+        delete from elec_work_task
+        <where>
+            <if test="id!=null and id!=''">
+                and id=#{id}
+            </if>
+            <if test="owner_id!=null and owner_id!=''">
+                and owner_id=#{owner_id}
+            </if>
+            <if test="wait_task_type!=null and wait_task_type!=''">
+                and wait_task_type=#{wait_task_type}
+            </if>
+            <if test="wait_task_id!=null and wait_task_id!=''">
+                and wait_task_id =#{wait_task_id}
+            </if>
+            <if test="is_deal!=null and is_deal!=''">
+                and is_deal =#{is_deal}
+            </if>
+        </where>
+    </delete>
+</mapper>

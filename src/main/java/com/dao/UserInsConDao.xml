@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.UserInsConDao">
+    <select id="find" resultType="com.entity.UserInsCon">
+        select * from elec_user_inspection_consume uis
+            <where>
+                <if test="id!=null and id!=''">
+                    and uis.id=#{id}
+                </if>
+                <if test="staff_id!=null and staff_id!=''">
+                    and uis.staff_id=#{staff_id}
+                </if>
+                <if test="task_id!=null and task_id!=''">
+                    and uis.task_id=#{task_id}
+                </if>
+                <if test="pos_type!=null and pos_type!=''">
+                    and uis.pos_type=#{pos_type}
+                </if>
+            </where>
+    </select>
+    <insert id="add">
+        insert into elec_user_inspection_consume(staff_id,task_id,pos_type) values(
+        #{staff_id},#{task_id},#{pos_type}
+        )
+    </insert>
+    <delete id="deleteByEntity">
+        delete from elec_user_inspection_consume
+        <where>
+            <if test="id!=null and id!=''">
+                and id=#{id}
+            </if>
+            <if test="staff_id!=null and staff_id!=''">
+                and staff_id=#{staff_id}
+            </if>
+            <if test="task_id!=null and task_id!=''">
+                and task_id=#{task_id}
+            </if>
+            <if test="pos_type!=null and pos_type!=''">
+                and pos_type=#{pos_type}
+            </if>
+        </where>
+    </delete>
+</mapper>

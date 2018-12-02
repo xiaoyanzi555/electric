@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.ResourceDao">
+    <resultMap id="baseMap" type="map">
+        <result property="name" column="menu_name"/>
+        <result property="value" column="id"/>
+    </resultMap>
+    <sql id="baseSql">
+        <if test="example!=null">
+            <if test="example.menu_name!=null and example.menu_name.trim().length()>0">
+                and menu_name like concat('%',#{example.menu_name},'%')
+            </if>
+            <if test="example.parent_id!=null">
+                and parent_id = #{example.parent_id}
+            </if>
+            <if test="example.url!=null and example.url.trim().length()>0">
+                and url like concat('%',#{example.url},'%')
+            </if>
+            <if test="example.parent_ids!=null and example.parent_ids.trim().length()>0">
+                and parent_ids like concat('%',#{example.parent_ids},'%')
+            </if>
+            <if test="example.permissions!=null and example.permissions.trim().length()>0">
+                and permissions like concat('%',#{example.permissions},'%')
+            </if>
+            <if test="example.menu_type!=null and example.menu_type.trim().length()>0">
+                and menu_type like concat('%',#{example.menu_type},'%')
+            </if>
+            <if test="example.menu_class!=null and example.menu_class.trim().length()>0">
+                and menu_class like concat('%',#{example.menu_class},'%')
+            </if>
+        </if>
+    </sql>
+    <select id="findById" parameterType="int" resultType="com.entity.Resource">
+        select * from elec_resource where id = #{id}
+    </select>
+    <select id="count" resultType="int" parameterType="com.entity.Resource">
+        select count(*) from elec_resource
+        <where>
+            <include refid="baseSql"/>
+        </where>
+    </select>
+    <select id="findByExample" resultType="com.entity.Resource">
+        select d1.*,(select menu_name from elec_resource d2 where d2.id = d1.parent_id) parent_name
+        from elec_resource d1
+        <where>
+            <include refid="baseSql"/>
+        </where>
+        order by d1.id
+    </select>
+    <select id="findSelctInfoByExample" resultMap="baseMap" parameterType="com.entity.Resource">
+        select menu_name,id
+        from elec_resource
+        <where>
+            <include refid="baseSql"/>
+        </where>
+        order by id
+    </select>
+    <select id="findByExampleWithPage" resultType="com.entity.Resource">
+        select d1.*,(select menu_name from elec_resource d2 where d2.id = d1.parent_id) parent_name from elec_resource d1
+        <where>
+            <include refid="baseSql"/>
+        </where>
+        order by id limit #{start},#{rows}
+    </select>
+    <select id="findByExampleWithBean" resultType="com.entity.Resource" parameterType="com.entity.Resource">
+        select d1.*,(select menu_name from elec_resource d2 where d2.id = d1.parent_id) parent_name from elec_resource d1 where d1.id = #{id}
+    </select>
+    <update id="update" parameterType="com.entity.Resource">
+        update elec_resource
+        <set>
+            <if test="menu_name!=null and menu_name.trim().length()>0">menu_name=#{menu_name},</if>
+            <if test="parent_id!=null">parent_id=#{parent_id},</if>
+            <if test="parent_ids!=null and parent_ids.trim().length()>0">parent_ids=#{parent_ids},</if>
+            <if test="permissions!=null and permissions.trim().length()>0">permissions=#{permissions},</if>
+            <if test="menu_type!=null and menu_type.trim().length()>0">menu_type=#{menu_type},</if>
+            <if test="menu_class!=null and menu_class.trim().length()>0">menu_class=#{menu_class},</if>
+            <if test="sequence!=null">sequence=#{sequence},</if>
+        </set>
+        where id = #{id}
+    </update>
+    <insert id="add" parameterType="com.entity.Resource" useGeneratedKeys="true" keyProperty="id">
+        insert into elec_resource (menu_name,parent_id,parent_ids,permissions,menu_type,menu_class,create_time,url) values
+        (#{menu_name},#{parent_id},#{parent_ids},#{permissions},#{menu_type},#{menu_class},#{create_time},#{url})
+    </insert>
+    <delete id="delete" parameterType="int">
+        delete from elec_resource where id = #{id}
+    </delete>
+</mapper>

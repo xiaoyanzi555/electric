@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.DefectTypeDao">
+    <sql id="baseSql">
+        <if test="example!=null">
+            <where>
+                <if test="example.id!=null and example.id!=''">
+                    and d.id like concat('%',#{example.id},'%')
+                </if>
+                <if test="example.defect_type!=null and example.defect_type.trim().length()>0">
+                    and d.defect_type like concat('%',#{example.defect_type},'%')
+                </if>
+                <if test="example.use_state!=null and example.use_state!=''">
+                    and d.use_state like concat('%',#{example.use_state},'%')
+                </if>
+            </where>
+        </if>
+    </sql>
+    <select id="find" resultType="com.entity.DefectType">
+        select * from elec_defect_type d
+        <include refid="baseSql"/>
+        order by d.id limit #{page},#{rows}
+    </select>
+    <select id="findAll" resultType="com.entity.DefectType">
+        select * from elec_defect_type
+    </select>
+    <select id="count" resultType="int">
+        select count(1) from elec_defect_type d
+        <include refid="baseSql"/>
+    </select>
+    <select id="findById" resultType="com.entity.DefectType">
+        select * from elec_defect_type where id=#{id}
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+        insert into elec_defect_type(defect_type,use_state) values(
+        #{defect_type},#{use_state})
+    </insert>
+    <update id="update" parameterType="com.entity.DefectType">
+        update elec_defect_type d
+        <if test="example!=null">
+            <set>
+                <if test="example.id!=null and  example.id!=''">
+                    d.id=#{example.id},
+                </if>
+                <if test="example.defect_type!=null and  example.defect_type.trim().length()>0">
+                    d.defect_type=#{example.defect_type},
+                </if>
+                <if test="example.use_state!=null and  example.use_state!=''">
+                    d.use_state=#{example.use_state},
+                </if>
+            </set>
+        </if>
+        where d.id=#{example.id}
+    </update>
+    <delete id="delete" parameterType="int">
+        delete from elec_defect_type where id=#{id}
+    </delete>
+</mapper>

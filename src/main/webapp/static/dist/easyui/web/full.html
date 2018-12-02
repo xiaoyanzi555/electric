@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Full Layout - jQuery EasyUI Demo</title>
+	<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../themes/icon.css">
+	<!--link rel="stylesheet" href="../ztree/css/demo.css" type="text/css"-->
+	<link rel="stylesheet" href="../ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">		
+	<link rel="stylesheet" type="text/css" href="../demo.css">
+	<script type="text/javascript" src="../jquery.min.js"></script>
+	<script type="text/javascript" src="../jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../ztree/js/jquery.ztree.core-3.5.js"></script>	
+	<style type="text/css">
+		/*去除datagrid下面的3个像素空白*/
+		#maintab  >.tabs-panels >.panel >.panel-body {overflow:hidden;}
+	</style>
+	<script type="text/javascript">
+		var setting = {
+			data: {
+				simpleData: {
+					enable: true
+				}
+			},
+			callback: {
+				onClick: function(event, treeId, treeNode){
+					//alert($('#maintab').height());
+					$("#maintab").tabs(
+						'add',{    
+						    title:treeNode.name,    
+						    content:'<iframe src=' + $(treeNode).attr('href') +
+						     ' frameborder=0 scrolling=no marginheight=0 width="100%" height='
+						     +($("#maintab > .tabs-panels").height()) + 
+						     '></iframe>',  
+							/*href:'user.html',*/
+						    closable:true
+						}						
+					);  			
+				}
+			}			
+		};
+
+		var zNodes1 =[
+			{ id:1, pId:0, name:"权限管理", open:true,target:"",iconOpen:"../ztree/css/zTreeStyle/img/diy/1_open.png", iconClose:"../../../css/zTreeStyle/img/diy/1_close.png"},
+			{ id:11, pId:1, name:"用户管理",href:"user.html",icon:"../ztree/css/zTreeStyle/img/diy/2.png"},
+			{ id:12, pId:1, name:"部门管理",href:"unit.html",icon:"../ztree/css/zTreeStyle/img/diy/3.png"},
+			{ id:13, pId:1, name:"角色管理",href:"role.html",icon:"../ztree/css/zTreeStyle/img/diy/4.png"},
+			{ id:14, pId:1, name:"字典管理",href:"dict.html",icon:"../ztree/css/zTreeStyle/img/diy/9.png"}
+		];
+		
+		var zNodes2 =[
+			{ id:1, pId:0, name:"客户管理", open:true, iconOpen:"../ztree/css/zTreeStyle/img/diy/1_open.png", iconClose:"../../../css/zTreeStyle/img/diy/1_close.png"},
+			{ id:11, pId:1, name:"机会管理", href:"chance.html",icon:"../ztree/css/zTreeStyle/img/diy/2.png"},
+			{ id:12, pId:1, name:"计划管理", href:"plane.html",icon:"../ztree/css/zTreeStyle/img/diy/3.png"},
+			{ id:13, pId:1, name:"客户管理", href:"customer.html",icon:"../ztree/css/zTreeStyle/img/diy/4.png"},
+			{ id:14, pId:1, name:"服务管理", href:"service.html",icon:"../ztree/css/zTreeStyle/img/diy/9.png"}
+		];
+				
+		$(function(){
+		   $.fn.zTree.init($("#treeDemo1"), setting, zNodes1);	
+		   $.fn.zTree.init($("#treeDemo2"), setting, zNodes2);			
+		});
+	</script>
+	<style type="text/css">
+		.pannel_body{overflow:hidden;}	
+	   iframe{margin:0;padding:0;border:0;}
+	</style>
+</head>
+<body class="easyui-layout">
+	<div data-options="region:'north',split:true" style="height:50px;background:#FFF url(../images/bg.jpg);padding:10px">north region</div>
+	<div data-options="region:'west',split:true,title:'功能模块'" style="width:200px;">
+			<div class="easyui-accordion" data-options="fit:true,border:false">
+				<div title="功能权限">
+					<ul id="treeDemo1" class="ztree"></ul>
+				</div>
+				<div title="客户管理">
+					<ul id="treeDemo2" class="ztree"></ul>
+				</div>
+			</div>
+	</div>
+	<div data-options="region:'east',split:true,title:'边栏'" style="width:100px;">east region</div>
+	<div data-options="region:'south',split:true,title:'信息'" style="height:100px;background:#FFF;">south region</div>
+	<div data-options="region:'center'">
+		<div class="easyui-tabs" data-options="fit:true,border:false,striped:true,pagination:true,pageSize:10,onUpdate:function(title,index){}" id="maintab">
+				<div title="主页内容">
+					<p style="font-size:14px">jQuery EasyUI framework helps you build your web pages easily.</p>
+					<ul>
+						<li>easyui is a collection of user-interface plugin based on jQuery.</li>
+						<li>easyui provides essential functionality for building modem, interactive, javascript applications.</li>
+						<li>using easyui you don't need to write many javascript code, you usually defines user-interface by writing some HTML markup.</li>
+						<li>complete framework for HTML5 web page.</li>
+						<li>easyui save your time and scales while developing your products.</li>
+						<li>easyui is very easy but powerful.</li>
+					</ul>
+				</div>
+			</div>		
+	</div>
+</body>
+</html>

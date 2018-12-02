@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Full Layout - jQuery EasyUI Demo</title>
+	<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="../demo.css">
+	<script type="text/javascript" src="../jquery.min.js"></script>
+	<script type="text/javascript" src="../jquery.easyui.min.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$("#tb").datagrid({
+				url:'data.json',
+				fitColumns:true,
+				width:'100%',
+				columns:[[
+					{field:'id',title:'编号'},
+					{field:'name',title:'编号'},
+					{field:'age',title:'编号'},
+					{field:'phone',title:'编号'},
+					{field:'address',title:'编号',width:100}
+				]]
+			});
+		});
+	</script>
+</head>
+<body>
+
+	<div id="tb" style="padding:5px;height:auto">
+	</div>	
+</body>
+</html>

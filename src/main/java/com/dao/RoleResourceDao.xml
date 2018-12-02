@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.RoleResourceDao">
+    <select id="findById" parameterType="int" resultType="com.entity.RoleResource">
+        select * from elec_role_resource where id = #{id}
+    </select>
+    <select id="findByRoleId" parameterType="int" resultType="int">
+        select r.resource_id from elec_role_resource r inner join elec_role o on r.role_id = o.id where o.id = #{roleid}
+    </select>
+    <update id="update" parameterType="com.entity.RoleResource">
+        update elec_role_resource
+        <set>
+          <if test="resource_id!=null">resource_id=#{resource_id},</if>
+          <if test="role_id!=null">role_id=#{role_id},</if>
+        </set>
+        where id = #{id}
+    </update>
+    <insert id="add" parameterType="com.entity.RoleResource" useGeneratedKeys="true" keyProperty="id">
+      insert into elec_role_resource (id,resource_id,role_id) values (#{id},#{resource_id},#{role_id})
+    </insert>
+    <delete id="delete" parameterType="int">
+        delete from elec_role_resource where id = #{id}
+    </delete>
+    <delete id="deleteByEntity" parameterType="com.entity.RoleResource">
+        delete from elec_role_resource
+        <where>
+            <if test="role_id!=null">and role_id = #{role_id}</if>
+            <if test="resource_id!=null">and resource_id = #{resource_id}</if>
+            <if test="id!=null">and id = #{id}</if>
+        </where>
+    </delete>
+</mapper>

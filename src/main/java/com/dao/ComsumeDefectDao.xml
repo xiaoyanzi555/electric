@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.ComsumeDefectDao">
+    <select id="findByEntity" resultType="com.entity.ComsumeDefect">
+        select * from elec_comsume_defect
+        <where>
+            <if test="comsume_id!=null and comsume_id!=''">
+                and comsume_id=#{comsume_id}
+            </if>
+            <if test="defect_id!=null and defect_id!=''">
+                and defect_id=#{defect_id}
+            </if>
+            <if test="is_deal!=null and is_deal!=''">
+                and is_deal=#{is_deal}
+            </if>
+        </where>
+    </select>
+    <insert id="add">
+        insert into elec_comsume_defect(comsume_id,defect_id,is_deal) values(#{comsume_id},#{defect_id},#{is_deal})
+    </insert>
+    <delete id="deleteByEntity">
+        delete from elec_comsume_defect
+        <where>
+            <if test="id!=null and id!=''">
+                and id=#{id}
+            </if>
+            <if test="comsume_id!=null and comsume_id!=''">
+                and comsume_id=#{comsume_id}
+            </if>
+            <if test="defect_id!=null and defect_id!=''">
+                and defect_id=#{defect_id}
+            </if>
+            <if test="is_deal!=null and is_deal!=''">
+                and is_deal=#{is_deal}
+            </if>
+        </where>
+    </delete>
+</mapper>

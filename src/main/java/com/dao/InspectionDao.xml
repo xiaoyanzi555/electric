@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.InspectionDao">
+    <sql id="baseSql">
+        <if test="example!=null">
+            <where>
+                <if test="example.id!=null and example.id!=''">
+                    and i.id like concat('%',#{example.id},'%')
+                </if>
+                <if test="example.line_id!=null and example.line_id!=''">
+                    and i.line_id like concat('%',#{example.line_id},'%')
+                </if>
+                <if test="example.distribute_id!=null and example.distribute_id!=''">
+                    and i.distribute_id like concat('%',#{example.distribute_id},'%')
+                </if>
+                <if test="example.task_state!=null and example.task_state!=''">
+                    and i.task_state like concat('%',#{example.task_state},'%')
+                </if>
+                <if test="example.task_cancel!=null and example.task_cancel!=''">
+                    and i.task_cancel like concat('%',#{example.task_cancel},'%')
+                </if>
+                <if test="example.task_code!=null and example.task_code.trim().length()>0">
+                    and i.task_code like concat('%',#{example.task_code},'%')
+                </if>
+                <if test="example.task_name!=null and example.task_name.trim().length()>0">
+                    and i.task_name like concat('%',#{example.task_name},'%')
+                </if>
+                <if test="example.start_pole_code!=null and example.start_pole_code.trim().length()>0">
+                    and i.start_pole_code like concat('%',#{example.start_pole_code},'%')
+                </if>
+                <if test="example.end_pole_code!=null and example.end_pole_code.trim().length()>0">
+                    and i.end_pole_code like concat('%',#{example.end_pole_code},'%')
+                </if>
+                <if test="example.distribute_time!=null and example.distribute_time.trim().length()>0">
+                    and i.distribute_time like concat('%',#{example.distribute_time},'%')
+                </if>
+                <if test="example.task_end_time!=null and example.task_end_time.trim().length()>0">
+                    and i.task_end_time like concat('%',#{example.task_end_time},'%')
+                </if>
+                <if test="example.remark!=null and example.remark.trim().length()>0">
+                    and i.remark like concat('%',#{example.remark},'%')
+                </if>
+                <if test="example.leader_id!=null and example.leader_id!=''">
+                    and i.leader_id =#{example.leader_id}
+                </if>
+            </where>
+        </if>
+    </sql>
+    <sql id="baseSqlExceptNoDis">
+        <if test="example!=null">
+            <where>
+                <if test="example.id!=null and example.id!=''">
+                    and i.id like concat('%',#{example.id},'%')
+                </if>
+                <if test="example.line_id!=null and example.line_id!=''">
+                    and i.line_id like concat('%',#{example.line_id},'%')
+                </if>
+                <if test="example.distribute_id!=null and example.distribute_id!=''">
+                    and i.distribute_id like concat('%',#{example.distribute_id},'%')
+                </if>
+                <if test="example.task_cancel!=null and example.task_cancel!=''">
+                    and i.task_cancel like concat('%',#{example.task_cancel},'%')
+                </if>
+                <if test="example.task_code!=null and example.task_code.trim().length()>0">
+                    and i.task_code like concat('%',#{example.task_code},'%')
+                </if>
+                <if test="example.task_name!=null and example.task_name.trim().length()>0">
+                    and i.task_name like concat('%',#{example.task_name},'%')
+                </if>
+                <if test="example.start_pole_code!=null and example.start_pole_code.trim().length()>0">
+                    and i.start_pole_code like concat('%',#{example.start_pole_code},'%')
+                </if>
+                <if test="example.end_pole_code!=null and example.end_pole_code.trim().length()>0">
+                    and i.end_pole_code like concat('%',#{example.end_pole_code},'%')
+                </if>
+                <if test="example.distribute_time!=null and example.distribute_time.trim().length()>0">
+                    and i.distribute_time like concat('%',#{example.distribute_time},'%')
+                </if>
+                <if test="example.task_end_time!=null and example.task_end_time.trim().length()>0">
+                    and i.task_end_time like concat('%',#{example.task_end_time},'%')
+                </if>
+                <if test="example.remark!=null and example.remark.trim().length()>0">
+                    and i.remark like concat('%',#{example.remark},'%')
+                </if>
+                and i.leader_id =#{example.leader_id} and i.task_state!=1
+            </where>
+        </if>
+    </sql>
+    <select id="find" resultType="com.entity.Inspection">
+        select *,l.line_name as line_name_String,u.uname as distribute_name
+          from elec_inspection_task i left join elec_line l on i.line_id=l.id
+            left join elec_user u on i.distribute_id=u.id
+        <include refid="baseSql"/>
+        order by i.id limit #{page},#{rows}
+    </select>
+    <select id="findExceptNoDis" resultType="com.entity.Inspection">
+        select *,l.line_name as line_name_String,u.uname as distribute_name
+        from elec_inspection_task i left join elec_line l on i.line_id=l.id
+        left join elec_user u on i.distribute_id=u.id
+        <include refid="baseSqlExceptNoDis"/>
+        order by i.id limit #{page},#{rows}
+    </select>
+    <select id="findAll" resultType="com.entity.Inspection">
+        select * from elec_inspection_task
+    </select>
+    <select id="count" resultType="int">
+        select count(1) from elec_inspection_task i
+        <include refid="baseSql"/>
+    </select>
+    <select id="countExceptNoDis" resultType="int">
+        select count(1) from elec_inspection_task i
+        <include refid="baseSqlExceptNoDis"/>
+    </select>
+    <select id="findById" resultType="com.entity.Inspection">
+        select *,l.line_name as line_name_String,u.uname as distribute_name
+          from elec_inspection_task i left join elec_line l on i.line_id=l.id
+            left join elec_user u on i.distribute_id=u.id
+        where i.id=#{id}
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+        insert into elec_inspection_task(task_code,task_name,line_id,start_pole_code,
+        end_pole_code,distribute_id,distribute_time,task_state,task_end_time,task_cancel,remark,leader_id) values(
+        #{task_code},#{task_name},#{line_id},#{start_pole_code},
+        #{end_pole_code},#{distribute_id},#{distribute_time},#{task_state},#{task_end_time},#{task_cancel},
+        #{remark},#{leader_id}
+        )
+    </insert>
+    <update id="update">
+        update elec_inspection_task
+            <if test="example!=null">
+                <set>
+                    <if test="example.line_id!=null and example.line_id!=''">
+                        line_id=#{example.line_id},
+                    </if>
+                    <if test="example.distribute_id!=null and example.distribute_id!=''">
+                        distribute_id=#{example.distribute_id},
+                    </if>
+                    <if test="example.task_state!=null and example.task_state!=''">
+                        task_state=#{example.task_state},
+                    </if>
+                    <if test="example.task_cancel!=null and example.task_cancel!=''">
+                        task_cancel=#{example.task_cancel},
+                    </if>
+                    <if test="example.task_code!=null and example.task_code!=''">
+                        task_code=#{example.task_code},
+                    </if>
+                    <if test="example.task_name!=null and example.task_name!=''">
+                        task_name=#{example.task_name},
+                    </if>
+                    <if test="example.start_pole_code!=null and example.start_pole_code!=''">
+                        start_pole_code=#{example.start_pole_code},
+                    </if>
+                    <if test="example.end_pole_code!=null and example.end_pole_code!=''">
+                        end_pole_code=#{example.end_pole_code},
+                    </if>
+                    <if test="example.distribute_time!=null and example.distribute_time!=''">
+                        distribute_time=#{example.distribute_time},
+                    </if>
+                    <if test="example.task_end_time!=null and example.task_end_time!=''">
+                        task_end_time=#{example.task_end_time},
+                    </if>
+                    <if test="example.remark!=null and example.remark!=''">
+                        remark=#{example.remark},
+                    </if>
+                    <if test="example.leader_id!=null and example.leader_id!=''">
+                        leader_id=#{example.leader_id}
+                    </if>
+                </set>
+            </if>
+        where id=#{example.id}
+    </update>
+</mapper>

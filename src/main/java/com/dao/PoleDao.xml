@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.PoleDao">
+    <sql id="baseSql">
+        <if test="example!=null">
+            <where>
+                <if test="example.id!=null and example.id!=''">
+                    and p.id like concat('%',#{example.id},'%')
+                </if>
+                <if test="example.pole_code!=null and example.pole_code.trim().length>0">
+                    and p.pole_code like concat('%',#{example.pole_code},'%')
+                </if>
+                <if test="example.line_id!=null and example.line_id!=''">
+                    and p.line_id like concat('%',#{example.line_id},'%')
+                </if>
+                <if test="example.use_state!=null and example.use_state!=''">
+                    and p.use_state like concat('%',#{example.use_state},'%')
+                </if>
+            </where>
+        </if>
+    </sql>
+    <select id="find" resultType="com.entity.Pole">
+        select *,l.line_name as line_name from elec_pole p left join elec_line l on p.line_id=l.id
+          <include refid="baseSql"/>
+        order by p.id limit #{page},#{rows}
+    </select>
+    <select id="count" resultType="int">
+        select count(1) from elec_pole p
+        <include refid="baseSql"/>
+    </select>
+    <select id="findById" resultType="com.entity.Pole">
+        select * from elec_pole p where p.id=#{id}
+    </select>
+    <select id="findStartAndEnd" resultMap="min_max">
+        select min(pole_code) as min,max(pole_code) as max from elec_pole where line_id=#{line_id}
+    </select>
+    <resultMap id="min_max" type="java.util.HashMap">
+        <result property="min" javaType="string"></result>
+        <result property="max" javaType="string"></result>
+    </resultMap>
+   <select id="findByEntity" resultType="com.entity.Pole">
+        select *,l.line_name as line_name,l.line_code as line_code from elec_pole p left join elec_line l on p.line_id=l.id
+        <if test="example!=null">
+            <where>
+                <if test="example.id!=null and example.id!=''">
+                    and p.id=#{example.id}
+                </if>
+                <if test="example.pole_code!=null and example.pole_code.trim().length>0">
+                    and p.pole_code=#{example.pole_code
+                </if>
+                <if test="example.line_id!=null and example.line_id!=''">
+                    and p.line_id =#{example.line_id}
+                </if>
+                <if test="example.use_state!=null and example.use_state!=''">
+                    and p.use_state=#{example.use_state
+                </if>
+            </where>
+        </if>
+    </select>
+    <insert id="add">
+        insert into elec_pole(pole_code,line_id,use_state) values(
+        #{pole_code},#{line_id},#{use_state}
+        )
+    </insert>
+    <update id="update">
+        update elec_pole p
+        <if test="example!=null">
+            <set>
+                <if test="example.pole_code!=null and example.pole_code!=''">
+                    p.pole_code=#{example.pole_code},
+                </if>
+                <if test="example.line_id!=null and example.line_id!=''">
+                    p.line_id=#{example.line_id},
+                </if>
+                <if test="example.use_state!=null and example.use_state!=''">
+                    p.use_state=#{example.use_state},
+                </if>
+            </set>
+        </if>
+        where p.id=#{example.id}
+    </update>
+    <update id="updateByEntity">
+        update elec_pole p
+        <if test="example!=null">
+            <set>
+                <if test="example.pole_code!=null and example.pole_code!=''">
+                    p.pole_code=#{example.pole_code},
+                </if>
+                <if test="example.use_state!=null and example.use_state!=''">
+                    p.use_state=#{example.use_state},
+                </if>
+            </set>
+        </if>
+        where p.line_id=#{example.line_id}
+    </update>
+    <delete id="delete">
+         delete from elec_pole where id=#{id}
+    </delete>
+    <delete id="deleteByEntity">
+        delete from elec_pole
+        <where>
+            <if test="line_id!=null and line_id!=''">
+                and line_id=#{line_id}
+            </if>
+        </where>
+    </delete>
+    <!--顺便把每个杆塔的缺陷查取出来-->
+    <select id="findByEntity_hasDefect" resultMap="pole_defect">
+        select *,l.line_name as line_name,l.line_code as line_code,
+        ty.defect_type as defect_type_string,u.uname as find_user_name
+        from elec_pole p
+          left join elec_line l on p.line_id=l.id
+          left join elec_defect d on p.id=d.pole_id
+          left join elec_defect_type ty on ty.id=d.defect_type
+          left join elec_user u on u.id=d.find_user_id
+        <if test="example!=null">
+            <where>
+                <if test="example.id!=null and example.id!=''">
+                    and p.id=#{example.id}
+                </if>
+                <if test="example.pole_code!=null and example.pole_code.trim().length>0">
+                    and p.pole_code=#{example.pole_code
+                </if>
+                <if test="example.line_id!=null and example.line_id!=''">
+                    and p.line_id =#{example.line_id}
+                </if>
+                <if test="example.use_state!=null and example.use_state!=''">
+                    and p.use_state=#{example.use_state
+                </if>
+            </where>
+        </if>
+    </select>
+    <resultMap id="pole_defect" type="com.entity.Pole">
+        <id property="id" column="id"/>
+        <association property="defect" javaType="com.entity.Defect"/>
+    </resultMap>
+</mapper>

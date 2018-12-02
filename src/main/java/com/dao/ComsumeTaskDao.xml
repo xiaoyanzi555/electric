@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.ComsumeTaskDao">
+    <sql id="baseSql">
+        <if test="example!=null">
+            <where>
+                <if test="example.id!=null and example.id!=''">
+                    and ct.id like concat('%',#{example.id},'%')
+                </if>
+                <if test="example.consume_task_code!=null and example.consume_task_code!=''">
+                    and ct.consume_task_code like concat('%',#{example.consume_task_code},'%')
+                </if>
+                <if test="example.task_name!=null and example.task_name!=''">
+                    and ct.task_name like concat('%',#{example.task_name},'%')
+                </if>
+                <if test="example.work_documents!=null and example.work_documents!=''">
+                    and ct.work_documents like concat('%',#{example.work_documents},'%')
+                </if>
+                <if test="example.task_user_id!=null and example.task_user_id!=''">
+                    and ct.task_user_id like concat('%',#{example.task_user_id},'%')
+                </if>
+                <if test="example.distribute_time!=null and example.distribute_time.trim().length()>0">
+                    and ct.distribute_time like concat('%',#{example.distribute_time},'%')
+                </if>
+                <if test="example.distribution_id!=null and example.distribution_id!=''">
+                    and ct.distribution_id like concat('%',#{example.distribution_id},'%')
+                </if>
+                <if test="example.task_description!=null and example.task_description.trim().length()>0">
+                    and ct.task_description like concat('%',#{example.task_description},'%')
+                </if>
+                <if test="example.task_state!=null and example.task_state!=''">
+                    and ct.task_state =#{example.end_pole_code}
+                </if>
+                <if test="example.remark!=null and example.remark.trim().length()>0">
+                    and ct.remark like concat('%',#{example.remark},'%')
+                </if>
+                <if test="example.task_cancel!=null and example.task_cancel!=''">
+                    and ct.task_cancel like concat('%',#{example.task_cancel},'%')
+                </if>
+                <if test="example.responsible_idea!=null and example.responsible_idea.trim().length()>0">
+                    and ct.responsible_idea like concat('%',#{example.responsible_idea},'%')
+                </if>
+                <if test="example.execution_description!=null and example.execution_description!=''">
+                    and ct.execution_description =#{example.execution_description}
+                </if>
+                <if test="example.distribution_idea!=null and example.distribution_idea!=''">
+                    and ct.distribution_idea =#{example.distribution_idea}
+                </if>
+                <if test="example.pass!=null and example.pass!=''">
+                    and ct.pass =#{example.pass}
+                </if>
+                <if test="example.overtime_record!=null and example.overtime_record!=''">
+                    and ct.overtime_record =#{example.overtime_record}
+                </if>
+                <if test="example.end_record!=null and example.end_record!=''">
+                    and ct.end_record =#{example.end_record}
+                </if>
+                <if test="example.defect_grade!=null and example.defect_grade!=''">
+                    and ct.defect_grade =#{example.defect_grade}
+                </if>
+                <if test="example.rate!=null and example.rate!=''">
+                    and ct.rate =#{example.rate}
+                </if>
+                <if test="example.find_id!=null and example.find_id!=''">
+                    and ct.find_id =#{example.find_id}
+                </if>
+                <if test="example.find_time!=null and example.find_time!=''">
+                    and ct.find_time =#{example.find_time}
+                </if>
+                <if test="example.task_complete_time!=null and example.task_complete_time!=''">
+                    and ct.task_complete_time =#{example.task_complete_time}
+                </if>
+            </where>
+        </if>
+    </sql>
+    <sql id="baseSqlNoDis">
+        <if test="example!=null">
+            <where>
+                <if test="example.id!=null and example.id!=''">
+                    and ct.id like concat('%',#{example.id},'%')
+                </if>
+                <if test="example.consume_task_code!=null and example.consume_task_code!=''">
+                    and ct.consume_task_code like concat('%',#{example.consume_task_code},'%')
+                </if>
+                <if test="example.task_name!=null and example.task_name!=''">
+                    and ct.task_name like concat('%',#{example.task_name},'%')
+                </if>
+                <if test="example.work_documents!=null and example.work_documents!=''">
+                    and ct.work_documents like concat('%',#{example.work_documents},'%')
+                </if>
+                <if test="example.task_user_id!=null and example.task_user_id!=''">
+                    and ct.task_user_id like concat('%',#{example.task_user_id},'%')
+                </if>
+                <if test="example.distribute_time!=null and example.distribute_time.trim().length()>0">
+                    and ct.distribute_time like concat('%',#{example.distribute_time},'%')
+                </if>
+                <if test="example.distribution_id!=null and example.distribution_id!=''">
+                    and ct.distribution_id like concat('%',#{example.distribution_id},'%')
+                </if>
+                <if test="example.task_description!=null and example.task_description.trim().length()>0">
+                    and ct.task_description like concat('%',#{example.task_description},'%')
+                </if>
+                <if test="example.remark!=null and example.remark.trim().length()>0">
+                    and ct.remark like concat('%',#{example.remark},'%')
+                </if>
+                <if test="example.task_cancel!=null and example.task_cancel!=''">
+                    and ct.task_cancel like concat('%',#{example.task_cancel},'%')
+                </if>
+                <if test="example.responsible_idea!=null and example.responsible_idea.trim().length()>0">
+                    and ct.responsible_idea like concat('%',#{example.responsible_idea},'%')
+                </if>
+                <if test="example.execution_description!=null and example.execution_description!=''">
+                    and ct.execution_description =#{example.execution_description}
+                </if>
+                <if test="example.distribution_idea!=null and example.distribution_idea!=''">
+                    and ct.distribution_idea =#{example.distribution_idea}
+                </if>
+                <if test="example.pass!=null and example.pass!=''">
+                    and ct.pass =#{example.pass}
+                </if>
+                <if test="example.overtime_record!=null and example.overtime_record!=''">
+                    and ct.overtime_record =#{example.overtime_record}
+                </if>
+                <if test="example.end_record!=null and example.end_record!=''">
+                    and ct.end_record =#{example.end_record}
+                </if>
+                <if test="example.defect_grade!=null and example.defect_grade!=''">
+                    and ct.defect_grade =#{example.defect_grade}
+                </if>
+                <if test="example.rate!=null and example.rate!=''">
+                    and ct.rate =#{example.rate}
+                </if>
+                <if test="example.find_id!=null and example.find_id!=''">
+                    and ct.find_id =#{example.find_id}
+                </if>
+                <if test="example.find_time!=null and example.find_time!=''">
+                    and ct.find_time =#{example.find_time}
+                </if>
+                <if test="example.task_complete_time!=null and example.task_complete_time!=''">
+                    and ct.task_complete_time =#{example.task_complete_time}
+                </if>
+                  and ct.task_state!=1
+            </where>
+        </if>
+    </sql>
+    <select id="find" resultType="com.entity.ComsumeTask">
+        select ct.*,u.uname as distribution_name from elec_consume_task ct
+          left join elec_user u on u.id=ct.distribution_id
+        <include refid="baseSql"/>
+        order by ct.id limit #{page},#{rows}
+    </select>
+    <select id="findById" resultType="com.entity.ComsumeTask">
+        select ct.*,u.uname as distribution_name,uu.uname as task_user_name
+        from elec_consume_task ct
+        left join elec_user u on u.id=ct.distribution_id
+        left join elec_user uu on uu.id=ct.task_user_id
+        where ct.id=#{id}
+    </select>
+    <select id="count" resultType="int">
+        select count(*) from elec_consume_task ct
+        <include refid="baseSql"/>
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+        insert into elec_consume_task(consume_task_code,task_name,work_documents,task_user_id,distribute_time,
+        distribution_id,task_description,task_state,remark,task_cancel,responsible_idea,execution_description,distribution_idea,
+        pass,overtime_record,end_record,defect_grade,rate,find_id,find_time,task_complete_time) values(
+        #{consume_task_code},#{task_name},#{work_documents},#{task_user_id},#{distribute_time},
+        #{distribution_id},#{task_description},#{task_state},#{remark},#{task_cancel},#{responsible_idea},#{execution_description},#{distribution_idea},
+        #{pass},#{overtime_record},#{end_record},#{defect_grade},#{rate},#{find_id},#{find_time},#{task_complete_time}
+        )
+    </insert>
+    <update id="update">
+        update elec_consume_task ct
+        <if test="example!=null">
+            <set>
+                <if test="example.consume_task_code!=null and example.consume_task_code!=''">
+                     ct.consume_task_code =#{example.consume_task_code},
+                </if>
+                <if test="example.task_name!=null and example.task_name!=''">
+                     ct.task_name =#{example.task_name},
+                </if>
+                <if test="example.work_documents!=null and example.work_documents!=''">
+                     ct.work_documents =#{example.work_documents},
+                </if>
+                <if test="example.task_user_id!=null and example.task_user_id!=''">
+                     ct.task_user_id =#{example.task_user_id},
+                </if>
+                <if test="example.distribute_time!=null and example.distribute_time.trim().length()>0">
+                     ct.distribute_time =#{example.distribute_time},
+                </if>
+                <if test="example.distribution_id!=null and example.distribution_id!=''">
+                     ct.distribution_id =#{example.distribution_id},
+                </if>
+                <if test="example.task_description!=null and example.task_description.trim().length()>0">
+                     ct.task_description =#{example.task_description},
+                </if>
+                <if test="example.task_state!=null and example.task_state!=''">
+                     ct.task_state =#{example.task_state},
+                </if>
+                <if test="example.remark!=null and example.remark.trim().length()>0">
+                     ct.remark =#{example.remark},
+                </if>
+                <if test="example.task_cancel!=null and example.task_cancel!=''">
+                     ct.task_cancel =#{example.task_cancel},
+                </if>
+                <if test="example.responsible_idea!=null and example.responsible_idea.trim().length()>0">
+                     ct.responsible_idea =#{example.responsible_idea},
+                </if>
+                <if test="example.execution_description!=null and example.execution_description!=''">
+                     ct.execution_description =#{example.execution_description},
+                </if>
+                <if test="example.distribution_idea!=null and example.distribution_idea!=''">
+                     ct.distribution_idea =#{example.distribution_idea},
+                </if>
+                <if test="example.pass!=null and example.pass!=''">
+                     ct.pass =#{example.pass},
+                </if>
+                <if test="example.overtime_record!=null and example.overtime_record!=''">
+                     ct.overtime_record =#{example.overtime_record},
+                </if>
+                <if test="example.end_record!=null and example.end_record!=''">
+                     ct.end_record =#{example.end_record},
+                </if>
+                <if test="example.defect_grade!=null and example.defect_grade!=''">
+                     ct.defect_grade =#{example.defect_grade},
+                </if>
+                <if test="example.rate!=null and example.rate!=''">
+                     ct.rate =#{example.rate},
+                </if>
+                <if test="example.find_id!=null and example.find_id!=''">
+                     ct.find_id =#{example.find_id},
+                </if>
+                <if test="example.find_time!=null and example.find_time!=''">
+                     ct.find_time =#{example.find_time},
+                </if>
+                <if test="example.task_complete_time!=null and example.task_complete_time!=''">
+                     ct.task_complete_time =#{example.task_complete_time},
+                </if>
+            </set>
+        </if>
+        where ct.id=#{example.id}
+    </update>
+    <select id="findNoDis" resultType="com.entity.ComsumeTask">
+        select ct.*,u.uname as distribution_name from elec_consume_task ct
+        left join elec_user u on u.id=ct.distribution_id
+        <include refid="baseSqlNoDis"/>
+        order by ct.id limit #{page},#{rows}
+    </select>
+    <select id="countNoDis" resultType="int">
+        select count(*) from elec_consume_task ct
+        <include refid="baseSqlNoDis"/>
+    </select>
+</mapper>

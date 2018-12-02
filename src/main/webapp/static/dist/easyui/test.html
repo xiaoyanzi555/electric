@@ -1,0 +1,43 @@
+<html>
+<head>
+<script type="text/javascript" src="jquery.min.js"></script>	
+<script type="text/javascript">
+	$(function(){
+		$("#checkall").click(function(){
+			if($("#checkall").attr("checked")==undefined){
+				$("[id^=ch_]").each(function(){
+					$(this).get(0).checked = true;	
+				});
+				$("#checkall").attr("checked",true)
+			}
+			else{
+				$("[id^=ch_]").each(function(){
+					$(this).get(0).checked = false;	
+				});
+				$("#checkall").attr("checked",false);
+			}
+		});	
+	});
+</script>	
+</head>
+<body>
+	<table>
+		<tr>
+			<th><input type="checkbox" id="checkall"/></th>	
+		  <th>ÐÕÃû</th>
+		</tr>
+		<tr>
+			<td><input type="checkbox" id="ch_1" /></td>	
+			<td>sss</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox" id="ch_2"/></td>	
+				<td>sss</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox" id="ch_3"/></td>	
+			<td>sss</td>
+		</tr>						
+	</table>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.DefectDao">
+    <sql id="baseSql">
+        <if test="example!=null">
+            <where>
+                <if test="example.id!=null and example.id!=''">
+                    and d.id like concat('%',#{example.id},'%')
+                </if>
+                <if test="example.defect_type!=null and example.defect_type!=''">
+                    and d.defect_type =#{example.defect_type}
+                </if>
+                <if test="example.line_id!=null and example.line_id!=''">
+                    and d.line_id =#{example.line_id}
+                </if>
+
+                <if test="example.rate!=null and example.rate!=''">
+                    and d.rate like concat('%',#{example.rate},'%')
+                </if>
+                <if test="example.pole_id!=null and example.pole_id!=''">
+                    and d.pole_id like concat('%',#{example.pole_id},'%')
+                </if>
+                <if test="example.defect_description!=null and example.defect_description!=''">
+                    and d.defect_description like concat('%',#{example.defect_description},'%')
+                </if>
+                <if test="example.find_time!=null and example.find_time!=''">
+                    and d.find_time like concat('%',#{example.find_time},'%')
+                </if>
+                <if test="example.find_user_id!=null and example.find_user_id!=''">
+                    and d.find_user_id =#{example.find_user_id}
+                </if>
+                <if test="example.defect_grade!=null and example.defect_grade!=''">
+                    and d.defect_grade =#{example.defect_grade}
+                </if>
+                <if test="example.isComsume!=null and example.isComsume!=''">
+                    and d.isComsume =#{example.isComsume}
+                </if>
+            </where>
+        </if>
+    </sql>
+    <insert id="add">
+        insert into elec_defect(defect_type,line_id,task_id,rate,pole_id,defect_description,find_time,
+        find_user_id,defect_grade,isComsume) values(
+        #{defect_type},#{line_id},#{task_id},#{rate},#{pole_id},#{defect_description},#{find_time},
+        #{find_user_id},#{defect_grade},#{isComsume}
+        )
+    </insert>
+    <select id="finByEntity" resultType="com.entity.Defect">
+        select * from elec_defect
+        <where>
+            <if test="id!=null and id!=''">
+                and id=#{id}
+            </if>
+            <if test="defect_type!=null and defect_type!=''">
+                and defect_type=#{defect_type}
+            </if>
+            <if test="line_id!=null and line_id!=''">
+                and line_id=#{line_id}
+            </if>
+            <if test="task_id!=null and task_id!=''">
+                and task_id=#{task_id}
+            </if>
+            <if test="rate!=null and rate!=''">
+                and rate=#{rate}
+            </if>
+            <if test="pole_id!=null and pole_id!=''">
+                and pole_id=#{pole_id}
+            </if>
+            <if test="defect_description!=null and defect_description!=''">
+                and defect_description=#{defect_description}
+            </if>
+            <if test="find_time!=null and find_time!=''">
+                and find_time=#{find_time}
+            </if>
+            <if test="find_user_id!=null and find_user_id!=''">
+                and find_user_id=#{find_user_id}
+            </if>
+            <if test="defect_grade!=null and defect_grade!=''">
+                and defect_grade=#{defect_grade}
+            </if>
+            <if test="isComsume!=null and isComsume!=''">
+                and isComsume=#{isComsume}
+            </if>
+        </where>
+    </select>
+    <select id="count" resultType="int">
+        select count(1) from elec_defect d left join  elec_inspection_task t on d.task_id=t.id
+        <include refid="baseSql"/>
+    </select>
+    <select id="find" resultType="com.entity.Defect">
+        select twice.*,u.uname as distribute_user,c.* from
+        (select once.*,u.uname as find_user_name from
+        (select d.*,t.task_code,l.line_code,p.pole_code,dt.defect_type as defect_type_string,t.distribute_time,t.distribute_id
+        from elec_defect d
+        left join  elec_inspection_task t on d.task_id=t.id
+        left join elec_pole p on d.pole_id=p.id
+        left join elec_defect_type dt on dt.id=d.defect_type
+        left join elec_line l on d.line_id=l.id) as once
+        left join elec_user u on u.id=once.find_user_id) as twice
+        left join elec_user u on u.id=twice.distribute_id
+        left join elec_defect d on twice.id=d.id
+        left join elec_consume_task c on twice.task_id=c.id
+        <include refid="baseSql"/>
+        limit #{page},#{rows}
+    </select>
+    <select id="findById" resultType="com.entity.Defect">
+        select twice.*,u.uname as distribute_user from
+        (select once.*,u.uname as find_user_name from
+        (select d.*,t.task_code,l.line_code,p.pole_code,dt.defect_type as defect_type_string,t.distribute_time,t.distribute_id
+        from elec_defect d
+        left join  elec_inspection_task t on d.task_id=t.id
+        left join elec_pole p on d.pole_id=p.id
+        left join elec_defect_type dt on dt.id=d.defect_type
+        left join elec_line l on d.line_id=l.id) as once
+        left join elec_user u on u.id=once.find_user_id) as twice
+        left join elec_user u on u.id=twice.distribute_id
+        left join elec_defect d on twice.id=d.id
+        where twice.id=#{id}
+    </select>
+    <update id="update" parameterType="com.entity.DefectType">
+        update elec_defect d
+        <if test="example!=null">
+            <set>
+                <if test="example.id!=null and  example.id!=''">
+                    d.id=#{example.id},
+                </if>
+                <if test="example.defect_type!=null and  example.defect_type!=''">
+                    d.defect_type=#{example.defect_type},
+                </if>
+                <if test="example.line_id!=null and  example.line_id!=''">
+                    d.line_id=#{example.line_id},
+                </if>
+                <if test="example.task_id!=null and  example.task_id!=''">
+                    d.task_id=#{example.task_id},
+                </if>
+                <if test="example.rate!=null and  example.rate!=''">
+                    d.rate=#{example.rate},
+                </if>
+                <if test="example.pole_id!=null and  example.pole_id!=''">
+                    d.pole_id=#{example.pole_id},
+                </if>
+                <if test="example.defect_description!=null and  example.defect_description!=''">
+                    d.defect_description=#{example.defect_description},
+                </if>
+                <if test="example.find_time!=null and  example.find_time!=''">
+                    d.find_time=#{example.find_time},
+                </if>
+                <if test="example.find_user_id!=null and  example.find_user_id!=''">
+                    d.find_user_id=#{example.find_user_id},
+                </if>
+                <if test="example.defect_grade!=null and  example.defect_grade!=''">
+                    d.defect_grade=#{example.defect_grade},
+                </if>
+                <if test="example.isComsume!=null and  example.isComsume!=''">
+                    d.isComsume=#{example.isComsume},
+                </if>
+            </set>
+        </if>
+        where d.id=#{example.id}
+    </update>
+</mapper>

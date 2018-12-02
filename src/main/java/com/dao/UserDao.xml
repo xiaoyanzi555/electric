@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.UserDao">
+    <sql id="baseSql">
+        <if test="example!=null">
+            <where>
+                <if test="example.id!=null and example.id!=''">
+                    and u.id =#{example.id}
+                </if>
+                <if test="example.account!=null and example.account.trim().length()>0">
+                    and u.account=#{example.account}
+                </if>
+                <if test="example.uname!=null and example.uname.trim().length()>0">
+                    and u.uname like concat('%',#{example.uname},'%')
+                </if>
+                <if test="example.sex!=null and example.sex!=''">
+                    and u.sex like concat('%',#{example.sex},'%')
+                </if>
+                <if test="example.password!=null and example.password.trim().length()>0">
+                    and u.password like concat('%',#{example.password},'%')
+                </if>
+                <if test="example.birthday!=null and example.birthday.trim().length()>0">
+                    and u.birthday like concat('%',#{example.birthday},'%')
+                </if>
+                <if test="example.dimission_time!=null and example.dimission_time.trim().length()>0">
+                    and u.dimission_time like concat('%',#{example.dimission_time},'%')
+                </if>
+                <if test="example.register_time!=null and example.register_time.trim().length()>0">
+                    and u.register_time like concat('%',#{example.register_time},'%')
+                </if>
+                <if test="example.hiredate_time!=null and example.hiredate_time.trim().length()>0">
+                    and u.hiredate_time like concat('%',#{example.hiredate_time},'%')
+                </if>
+                <if test="example.phone!=null and example.phone.trim().length()>0">
+                    and u.phone like concat('%',#{example.phone},'%')
+                </if>
+                <if test="example.email!=null and example.email.trim().length()>0">
+                    and u.email like concat('%',#{example.email},'%')
+                </if>
+
+                <if test="example.role_id!=null and example.role_id!=''">
+                    and u.role_id like concat('%',#{example.role_id},'%')
+                </if>
+                <if test="example.account_state!=null and example.account_state!=''">
+                    and u.account_state like concat('%',#{example.account_state},'%')
+                </if>
+                <if test="example.recent_login!=null and example.recent_login.trim().length()>0">
+                    and u.recent_login like concat('%',#{example.recent_login},'%')
+                </if>
+            </where>
+        </if>
+    </sql>
+    <select id="find" resultType="com.entity.User">
+        select u.*,r.role_name as roleName from elec_user u left join elec_role r on u.role_id=r.id
+        <include refid="baseSql"/>
+        order by id limit #{page},#{rows}
+    </select>
+    <select id="findAll" resultType="com.entity.User">
+         select * from elec_user
+    </select>
+
+    <select id="count" resultType="int" parameterType="com.entity.User">
+        select count(*) from elec_user u
+        <include refid="baseSql"/>
+    </select>
+
+    <select id="findById" resultType="com.entity.User">
+        select * from elec_user where id=#{id}
+    </select>
+    <select id="findByAccount" resultType="com.entity.User">
+        select u.*,r.role_name as roleName from elec_user u left join elec_role r on u.role_id=r.id where account=#{account}
+    </select>
+    <select id="findUsersByRoleId" resultType="com.entity.User">
+        select * from elec_user where role_id=#{role_id}
+    </select>
+    <insert id="add">
+        insert into elec_user(uname,role_id,account,password,birthday,phone,email,sex,dimission_time,register_time,hiredate_time,account_state,recent_login,salt)
+        values (#{uname},#{role_id},#{account},#{password},#{birthday},#{phone},#{email},#{sex},#{dimission_time},#{register_time},#{hiredate_time},#{account_state},
+        #{recent_login},#{salt})
+    </insert>
+    <update id="update">
+        update elec_user
+        <if test="example!=null">
+            <set>
+                <if test="example.uname!=null and example.uname!=''">
+                    uname=#{example.uname},
+                </if>
+                <if test="example.account!=null and example.account!=''">
+                    account=#{example.account},
+                </if>
+                <if test="example.salt!=null and example.salt!=''">
+                    salt=#{example.salt},
+                </if>
+                <if test="example.password!=null and example.password!=''">
+                    password=#{example.password},
+                </if>
+                <if test="example.birthday!=null and example.birthday!=''">
+                    birthday=#{example.birthday},
+                </if>
+                <if test="example.phone!=null and example.phone!=''">
+                    phone=#{example.phone},
+                </if>
+                <if test="example.email!=null and example.email!=''">
+                    email=#{example.email},
+                </if>
+                <if test="example.sex!=null and example.sex!=''">
+                    sex=#{example.sex},
+                </if>
+                <if test="example.dimission_time!=null and example.dimission_time!=''">
+                    dimission_time=#{example.dimission_time},
+                </if>
+                <if test="example.register_time!=null and example.register_time!=''">
+                    register_time=#{example.register_time},
+                </if>
+                <if test="example.account_state!=null and example.account_state!=''">
+                    account_state=#{example.account_state},
+                </if>
+                <if test="example.recent_login!=null and example.recent_login!=''">
+                    recent_login=#{example.recent_login},
+                </if>
+                <if test="example.hiredate_time!=null and example.hiredate_time!=''">
+                    hiredate_time=#{example.hiredate_time},
+                </if>
+                <if test="example.role_id!=null and example.role_id!=''">
+                    role_id=#{example.role_id},
+                </if>
+            </set>
+        </if>
+        where id=#{example.id}
+    </update>
+
+    <delete id="delete">
+        delete from elec_user where id=#{id}
+    </delete>
+
+
+
+    <select id="findAllRoles" parameterType="string" resultType="string">
+        select r.role_name from elec_role r inner join elec_user u on  r.id= u.role_id
+		where u.account = #{account}
+    </select>
+    <select id="findAllPermissions" parameterType="string" resultType="string">
+        select distinct r.permissions from elec_resource r
+        inner join elec_role_resource ur on r.id = ur.resource_id
+        inner join elec_role o on o.id = ur.role_id
+        inner join elec_user u on u.role_id = o.id
+        where u.account = #{account}
+    </select>
+
+    <select id="findMenu" parameterType="string" resultType="com.entity.Resource">
+        select distinct r.* from elec_resource r
+        inner join elec_role_resource ur on r.id = ur.resource_id
+        inner join elec_role o on o.id = ur.role_id
+        inner join elec_user u on u.role_id = o.id
+        where u.account = #{account} and r.menu_type=1
+    </select>
+    <!--1表示功能权限是用来展示菜单的-->
+</mapper>

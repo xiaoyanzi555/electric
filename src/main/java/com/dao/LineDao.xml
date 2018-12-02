@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.LineDao">
+    <sql id="baseSql">
+        <if test="example!=null">
+            <where>
+                <if test="example.id!=null and example.id!=''">
+                    and l.id like concat('%',#{example.id},'%')
+                </if>
+                <if test="example.line_name!=null and example.line_name.trim().length()>0">
+                    and l.line_name like concat('%',#{example.line_name},'%')
+                </if>
+                <if test="example.tower_base!=null and example.tower_base!=''">
+                    and l.tower_base like concat('%',#{example.tower_base},'%')
+                </if>
+                <if test="example.use_state!=null and example.use_state!=''">
+                    and l.use_state like concat('%',#{example.use_state},'%')
+                </if>
+                <if test="example.elec_grade!=null and example.elec_grade!=''">
+                    and l.elec_grade like concat('%',#{example.elec_grade},'%')
+                </if>
+                <if test="example.run_state!=null and example.run_state!=''">
+                    and l.run_state like concat('%',#{example.run_state},'%')
+                </if>
+                <if test="example.line_code!=null and example.line_code.trim().length()>0">
+                    and l.line_code like concat('%',#{example.line_code},'%')
+                </if>
+                <if test="example.line_len!=null and example.line_len.trim().length()>0">
+                    and l.line_len like concat('%',#{example.line_len},'%')
+                </if>
+                <if test="example.loop_len!=null and example.loop_len.trim().length()>0">
+                    and l.loop_len like concat('%',#{example.loop_len},'%')
+                </if>
+                <if test="example.start_pole!=null and example.start_pole.trim().length()>0">
+                    and l.start_pole like concat('%',#{example.start_pole},'%')
+                </if>
+                <if test="example.end_pole!=null and example.end_pole.trim().length()>0">
+                    and l.end_pole like concat('%',#{example.end_pole},'%')
+                </if>
+                <if test="example.deliver_time!=null and example.deliver_time.trim().length()>0">
+                    and l.deliver_time like concat('%',#{example.deliver_time},'%')
+                </if>
+                <if test="example.remake!=null and example.remake.trim().length()>0">
+                    and l.remake like concat('%',#{example.remake},'%')
+                </if>
+            </where>
+        </if>
+    </sql>
+    <select id="find" resultType="com.entity.Line">
+        select * from elec_line l
+        <include refid="baseSql"/>
+        order by l.id limit #{page},#{rows}
+    </select>
+    <select id="findAll" resultType="com.entity.Line">
+         select * from elec_line
+    </select>
+    <select id="count" resultType="int">
+        select count(1) from elec_line l
+        <include refid="baseSql"/>
+    </select>
+    <select id="findById" resultType="com.entity.Line">
+        select * from elec_line where id=#{id}
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+        insert into elec_line(line_name,line_code,line_len,loop_len,
+        tower_base,start_pole,end_pole,deliver_time,elec_grade,use_state,remake,run_state) values(
+        #{line_name},#{line_code},#{line_len},#{loop_len},
+        #{tower_base},#{start_pole},#{end_pole},#{deliver_time},#{elec_grade},#{use_state},#{remake},#{run_state}
+        )
+    </insert>
+    <update id="update" parameterType="com.entity.Line">
+        update elec_line l
+        <if test="example!=null">
+            <set>
+                <if test="example.id!=null and  example.id!=''">
+                     l.id=#{example.id},
+                </if>
+                <if test="example.line_name!=null and  example.line_name.trim().length()>0">
+                     l.line_name=#{example.line_name},
+                </if>
+                <if test="example.tower_base!=null and  example.tower_base!=''">
+                     l.tower_base=#{example.tower_base},
+                </if>
+                <if test="example.use_state!=null and example.use_state!=''">
+                     l.use_state=#{example.use_state},
+                </if>
+                <if test="example.elec_grade!=null and  example.elec_grade!=''">
+                     l.elec_grade=#{example.elec_grade},
+                </if>
+                <if test="example.run_state!=null and  example.run_state!=''">
+                     l.run_state=#{example.run_state},
+                </if>
+                <if test="example.line_code!=null and  example.line_code.trim().length()>0">
+                     l.line_code=#{example.line_code},
+                </if>
+                <if test="example.line_len!=null and  example.line_len!=''">
+                     l.line_len=#{example.line_len},
+                </if>
+                <if test="example.loop_len!=null and  example.loop_len!=''">
+                     l.loop_len=#{example.loop_len},
+                </if>
+                <if test="example.start_pole!=null and  example.start_pole.trim().length()>0">
+                     l.start_pole=#{example.start_pole},
+                </if>
+                <if test="example.end_pole!=null and  example.end_pole.trim().length()>0">
+                     l.end_pole=#{example.end_pole},
+                </if>
+                <if test="example.deliver_time!=null and  example.deliver_time.trim().length()>0">
+                     l.deliver_time=#{example.deliver_time},
+                </if>
+                <if test="example.remake!=null and  example.remake.trim().length()>0">
+                     l.remake=#{example.remake},
+                </if>
+            </set>
+        </if>
+        where l.id=#{example.id}
+    </update>
+    <delete id="delete" parameterType="int">
+        delete from elec_line where id=#{id}
+    </delete>
+</mapper>

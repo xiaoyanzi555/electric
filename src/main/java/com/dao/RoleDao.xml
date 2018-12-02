@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.RoleDao">
+    <sql id="baseSql">
+        <if test="example!=null">
+            <where>
+                <if test="example.id!=null and example.id!=''">
+                    and r.id like concat('%',#{example.id},'%')
+                </if>
+                <if test="example.createBy!=null and example.createBy!=''">
+                    and r.createBy like concat('%',#{example.createBy},'%')
+                </if>
+                <if test="example.use_state!=null and example.use_state!=''">
+                    and r.use_state like concat('%',#{example.use_state},'%')
+                </if>
+                <if test="example.role_code!=null and example.role_code.trim().length()>0">
+                    and r.role_code like concat('%',#{example.role_code},'%')
+                </if>
+                <if test="example.role_name!=null and example.role_name.trim().length()>0">
+                    and r.role_name like concat('%',#{example.role_name},'%')
+                </if>
+                <if test="example.modify_date!=null and example.modify_date.trim().length()>0">
+                    and r.modify_date like concat('%',#{example.modify_date},'%')
+                </if>
+            </where>
+        </if>
+    </sql>
+    <select id="find" resultType="com.entity.Role">
+        select r.*,u.uname as createByName from elec_role r
+          left join elec_user u on r.createBy=u.id
+        <include refid="baseSql"/>
+        order by r.id limit #{page},#{rows}
+
+    </select>
+    <select id="findAll" resultType="com.entity.Role">
+     select  * from elec_role
+    </select>
+    <select id="count" resultType="int">
+        select count(*) from elec_role r
+        <include refid="baseSql"/>
+        order by r.id
+    </select>
+    <select id="findById" resultType="com.entity.Role">
+        select * from elec_role where id=#{id}
+    </select>
+    <select id="findEntity" resultType="com.entity.Role">
+        select  * from elec_role r
+        <include refid="baseSql"/>
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+        insert into elec_role(role_code,role_name,createBy,modify_date,use_state) values(
+          #{role_code},#{role_name},#{createBy},#{modify_date},#{use_state}
+        )
+    </insert>
+    <update id="update">
+        update elec_role r
+        <if test="example!=null">
+            <set>
+                <if test="example.role_code!=null and example.role_code!=''">
+                    r.role_code=#{example.role_code},
+                </if>
+                <if test="example.role_name!=null and example.role_name!=''">
+                    r.role_name=#{example.role_name},
+                </if>
+                <if test="example.createBy!=null and example.createBy!=''">
+                    r.createBy=#{example.createBy},
+                </if>
+                <if test="example.modify_date!=null and example.modify_date!=''">
+                    r.modify_date=#{example.modify_date},
+                </if>
+                <if test="example.use_state!=null and example.use_state!=''">
+                    r.use_state=#{example.use_state},
+                </if>
+            </set>
+        </if>
+        where r.id=#{example.id}
+    </update>
+    <delete id="delete" parameterType="int">
+        delete from elec_role where id=#{id}
+    </delete>
+</mapper>
